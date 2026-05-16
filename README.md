@@ -3,6 +3,9 @@
 A Python-based risk analytics dashboard for analyzing stock portfolios.
 Built as a portfolio project targeting FinTech Risk Analytics roles.
 
+![Dashboard](assets/dashboard1.png)
+![Risk](assets/dashboard2.png)
+
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-red)
 ![yfinance](https://img.shields.io/badge/Data-yfinance-green)
