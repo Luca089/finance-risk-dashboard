@@ -25,7 +25,7 @@ from src.universe import REGION_MAP
 
 TRADING_DAYS   = 252        # Standard number of trading days per year
 RISK_FREE_RATE = 0.05       # US Treasury rate used as risk-free benchmark
-ROLLING_WINDOW = 30         # Rolling volatility window in trading days
+ROLLING_WINDOW = 30         # EWMA span in trading days (JPMorgan RiskMetrics standard)
 
 # REGION_MAP is imported from universe.py — geographic classification
 # is universe-level domain logic, not portfolio analytics logic.
@@ -187,12 +187,15 @@ class Portfolio:
 
     def rolling_volatility(self) -> pd.DataFrame:
         """
-        30-day rolling annualised volatility per ticker.
+        EWMA (Exponentially Weighted Moving Average) volatility per ticker.
 
-        Shows how risk evolves over time rather than as a single static number.
-        Used in app.py for the rolling volatility line chart.
+        Assigns more weight to recent observations — reacts faster to market
+        changes than a simple rolling window. No NaN gap at the start.
+        Industry standard: JPMorgan RiskMetrics model.
+
+        span=30 is equivalent to a 30-day decay factor.
         """
-        return self.returns.rolling(ROLLING_WINDOW).std() * np.sqrt(TRADING_DAYS)
+        return self.returns.ewm(span=ROLLING_WINDOW).std() * np.sqrt(TRADING_DAYS)
 
     def sharpe_ratio(self) -> pd.Series:
         """

@@ -64,7 +64,7 @@ def chart_annualised_returns(portfolio: Portfolio):
     fig = px.bar(
         data, x="Ticker", y="Annualised Return (%)",
         title    = "Annualised Return (CAGR)",
-        subtitle = "Geometric compounding of daily returns, annualised over the selected period. Formula: (1 + Total Return)^(252/n) - 1.",
+        subtitle = "Geometric compounding of daily returns, annualised over the selected period. Annualised Returns = (1 + Total Return)^(252/n) - 1.",
     )
     fig.add_hline(y=0, line_dash="dash", line_color="black")
     return fig
@@ -108,9 +108,8 @@ def chart_max_drawdown(portfolio: Portfolio):
 def chart_rolling_volatility(portfolio: Portfolio):
     return px.line(
         portfolio.rolling_volatility(),
-        title="Rolling Volatility (30 Days, Annualised)",
-        subtitle="Measures how much an asset's return fluctuates over time. Rolling Volatility = Standard Deviation of Daily Returns × √252, " \
-        "calculated over a 30-day window.",
+        title    = "EWMA Volatility (30-Day Span, Annualised)",
+        subtitle = "Exponentially weighted volatility — recent returns carry more weight than older ones. Industry standard: JPMorgan RiskMetrics. EWMA Volatillity = EWMA Std(Daily Returns) × √252.",
     )
 
 def chart_sharpe_ratio(portfolio: Portfolio):

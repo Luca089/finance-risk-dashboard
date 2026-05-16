@@ -53,7 +53,7 @@ finance-risk-dashboard/
 ### Risk Analysis
 | Metric | Formula |
 |--------|---------|
-| Rolling Volatility | Std(Daily Returns) × √252, 30-day window |
+| EWMA Volatility (30-Day Span, Annualised) | EWMA Std(Daily Returns) × √252 |
 | Beta | Covariance(Stock, Market) / Variance(Market) |
 | Maximum Drawdown | Min((Cumulative Return - Rolling Max) / Rolling Max) |
 
