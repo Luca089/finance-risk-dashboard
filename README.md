@@ -1,7 +1,6 @@
 # Finance Risk Dashboard
 
 A Python-based risk analytics dashboard for analyzing stock portfolios.
-Built as a portfolio project targeting FinTech Risk Analytics roles.
 
 ![Dashboard](assets/dashboard1.png)
 ![Risk](assets/dashboard2.png)
