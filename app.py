@@ -224,16 +224,24 @@ with col2:
 
 st.header("Performance Analysis")
 st.plotly_chart(chart_price(portfolio), use_container_width=True)
-st.plotly_chart(chart_annualised_returns(portfolio), use_container_width=True)
-st.plotly_chart(chart_alpha(portfolio), use_container_width=True)
+
+col1, col2 = st.columns(2)
+with col1:
+    st.plotly_chart(chart_annualised_returns(portfolio), use_container_width=True)
+with col2:    
+    st.plotly_chart(chart_alpha(portfolio), use_container_width=True)
 
 
 # ── Section 2: Risk Analysis ──────────────────────────────────────────────────
 
 st.header("Risk Analysis")
 st.plotly_chart(chart_rolling_volatility(portfolio), use_container_width=True)
-st.plotly_chart(chart_beta(portfolio), use_container_width=True)
-st.plotly_chart(chart_max_drawdown(portfolio), use_container_width=True)
+
+col1, col2 = st.columns(2)
+with col1:
+    st.plotly_chart(chart_beta(portfolio), use_container_width=True)
+with col2:    
+    st.plotly_chart(chart_max_drawdown(portfolio), use_container_width=True)
 
 # ── Section 3: Risk-Return Analysis ──────────────────────────────────────────
 
