@@ -76,7 +76,7 @@ def chart_alpha(portfolio: Portfolio):
         .reset_index(name="Alpha (Annualised)")
     )
     return px.bar(data, x="Ticker", y="Alpha (Annualised)", title="Alpha vs. S&P 500", subtitle="Measures the excess return of each stock " \
-    "beyond what is explained by market movements, adjusted for the risk-free rate (5% Government Bonds). <br>" \
+    "beyond what is explained by market movements, adjusted for the current risk-free rate. <br>" \
     "Jensens Alpha = (Stock Return - Risk-Free Rate) = α + β × (S&P 500 Return - Risk-Free Rate), α annualised × 252.")
 
 def chart_beta(portfolio: Portfolio):
@@ -119,7 +119,7 @@ def chart_sharpe_ratio(portfolio: Portfolio):
         .reset_index(name="Sharpe Ratio")
     )
     return px.bar(data, x="Ticker", y="Sharpe Ratio", title="Sharpe Ratio", subtitle="Evaluates return per unit of risk taken. Sharpe Ratio = "
-    "(Annual Return - 5% Risk-Free Rate) / Volatility. > 1.0 is good | > 2.0 is excellent | < 0 underperforms a government bond.")
+    "(Annual Return - current Risk-Free Rate) / Volatility. > 1.0 is good | > 2.0 is excellent | < 0 underperforms a government bond.")
 
 def chart_sector(portfolio: Portfolio):
     # Sector distribution as pie chart — uses metadata loaded in Portfolio.__init__.

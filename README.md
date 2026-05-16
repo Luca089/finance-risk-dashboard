@@ -63,7 +63,7 @@ finance-risk-dashboard/
 ### Risk-Return Analysis
 | Metric | Formula |
 |--------|---------|
-| Sharpe Ratio | (Annual Return - 5% Risk-Free Rate) / Volatility |
+| Sharpe Ratio | (Annual Return - Current Risk-Free Rate) / Volatility |
 
 ---
 
@@ -82,10 +82,10 @@ finance-risk-dashboard/
 ## Design Decisions
 
 - **Benchmark:** S&P 500 (^GSPC) — standard benchmark for US equities
-- **Risk-Free Rate:** 5% US Treasury — used for Jensen's Alpha and Sharpe Ratio
 - **Trading Days:** 252 — standard annualisation factor
 - **CAPM Regression:** Single `np.polyfit` call extracts both Alpha and Beta simultaneously
 - **Eager Loading:** All data fetched at Portfolio init — one loading phase, instant KPI methods thereafter
+- **Risk-Free Rate:** 10-year US Treasury yield (^TNX), fetched dynamically via yfinance. Falls back to 5% if fetch fails.
 
 ---
 
@@ -99,10 +99,6 @@ finance-risk-dashboard/
 - **No authentication** — dashboard is stateless and has no user authentication. Not suitable for multi-user production deployment without additional infrastructure.
 
 ### Financial
-- **No VaR** — Value at Risk (95%) is a Basel III standard risk metric and is not yet implemented.
-- **No weighted returns** — portfolio-level returns assume equal weighting across all tickers. Market-cap or custom weighting is not supported.
-- **Rolling volatility** — standard 30-day rolling window is used. EWMA (Exponentially Weighted Moving Average) would react faster to market regime changes and is the industry standard (JPMorgan RiskMetrics).
-- **Static risk-free rate** — 5% US Treasury rate is hardcoded. In practice this rate changes over time and should be fetched dynamically.
 - **US equities only** — universe is limited to S&P 500 constituents. No support for fixed income, commodities, or international equities.
 
 ---

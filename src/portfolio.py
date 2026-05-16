@@ -24,7 +24,7 @@ from src.universe import REGION_MAP
 # Defined at module level so any change propagates everywhere automatically.
 
 TRADING_DAYS   = 252        # Standard number of trading days per year
-RISK_FREE_RATE = 0.05       # US Treasury rate used as risk-free benchmark
+RISK_FREE_RATE = 0.05       # Fallback if dynamic fetch fails - see _get_risk_free_rate()
 ROLLING_WINDOW = 30         # EWMA span in trading days (JPMorgan RiskMetrics standard)
 
 # REGION_MAP is imported from universe.py — geographic classification
@@ -67,6 +67,7 @@ class Portfolio:
         self.returns           = self.prices.pct_change().dropna()
         self.benchmark_returns = self.benchmark_prices.pct_change().dropna()
         self.metadata          = self._load_metadata()
+        self.risk_free_rate    = self._get_risk_free_rate()
 
     def __repr__(self) -> str:
         return f"Portfolio(tickers={self.tickers}, period='{self.period}', benchmark='{self.benchmark_ticker}')"
@@ -103,6 +104,18 @@ class Portfolio:
             raise ValueError(f"No data returned for benchmark '{self.benchmark_ticker}'.")
 
         return benchmark
+    
+    def _get_risk_free_rate() -> float:
+        """
+        Fetches the current 10-year US Treasury yield as risk-free rate.
+        ^TNX is quoted in percent — divide by 100 to get decimal.
+        Falls back to 0.05 (5%) if fetch fails.
+        """
+        try:
+            rate = yf.Ticker("^TNX").fast_info["last_price"] / 100
+            return rate
+        except Exception:
+            return 0.05
 
     def _load_metadata(self) -> pd.DataFrame:
         """
@@ -143,7 +156,7 @@ class Portfolio:
         returns_aligned, benchmark_aligned = self.returns.align(
             self.benchmark_returns, join="inner", axis=0
         )
-        daily_rf = RISK_FREE_RATE / TRADING_DAYS
+        daily_rf = self.rik_free_rate / TRADING_DAYS
         return returns_aligned - daily_rf, benchmark_aligned - daily_rf
 
     def _regression(self) -> pd.DataFrame:
@@ -206,7 +219,7 @@ class Portfolio:
         Risk-free rate is set to 5% (US Treasury) via RISK_FREE_RATE constant.
         """
         annual_returns = self.returns.mean() * TRADING_DAYS
-        return (annual_returns - RISK_FREE_RATE) / self.volatility()
+        return (annual_returns - self.risk_free_rate) / self.volatility()
 
     def alpha(self) -> pd.Series:
         """
