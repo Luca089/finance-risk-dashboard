@@ -47,6 +47,7 @@ finance-risk-dashboard/
 | Metric | Formula |
 |--------|---------|
 | Relative Price Performance | (Price / Price₀ - 1) × 100 — benchmarked against S&P 500 |
+| Annualised Returns |  | (1 + Total Return)^(252/n) - 1 |
 | Jensen's Alpha | (Stock Return - RF) = α + β × (S&P 500 Return - RF), α annualised × 252 |
 
 ### Risk Analysis

@@ -132,7 +132,7 @@ class Portfolio:
                     "country": "N/A", "region": "Other",
                 }
         return pd.DataFrame(records).T
-    
+
     def _aligned_excess_returns(self) -> tuple:
         """
         Returns daily excess returns for stocks and benchmark, aligned on index.
@@ -145,7 +145,7 @@ class Portfolio:
         )
         daily_rf = RISK_FREE_RATE / TRADING_DAYS
         return returns_aligned - daily_rf, benchmark_aligned - daily_rf
-    
+
     def _regression(self) -> pd.DataFrame:
         """
         Runs CAPM regression per ticker vs. benchmark.
@@ -164,6 +164,17 @@ class Portfolio:
         return pd.DataFrame(records).T
 
     # ── Public: Risk ──────────────────────────────────────────────────────────
+
+    def annualised_returns(self) -> pd.Series:
+        """
+        Annualised return (CAGR) per ticker, in percent.
+
+        Uses geometric compounding — industry standard for performance reporting.
+        Formula: (1 + Total Return)^(252/n) - 1
+        Consistent with max_drawdown() — both return percent values.
+        """
+        n = len(self.returns)
+        return ((1 + self.returns).prod() ** (TRADING_DAYS / n) - 1) * 100
 
     def volatility(self) -> pd.Series:
         """
@@ -202,7 +213,7 @@ class Portfolio:
         Derived from CAPM regression in _regression().
         """
         return self._regression()["alpha_annualized"]
-    
+
     def beta(self) -> pd.Series:
         """
         Beta per ticker vs. the benchmark (S&P 500).
@@ -211,7 +222,7 @@ class Portfolio:
         | Beta < 1: less volatile. Derived from CAPM regression in _regression().
         """
         return self._regression()["beta"]
-    
+
     def max_drawdown(self) -> pd.Series:
         """
         Maximum Drawdown per ticker.
@@ -238,9 +249,10 @@ class Portfolio:
         Provided as a convenience method for notebook usage and external consumers.
         """
         return pd.DataFrame({
-            "volatility":       self.volatility(),
-            "sharpe_ratio":     self.sharpe_ratio(),
-            "alpha_annualized": self.alpha(),
-            "beta":             self.beta(),
-            "max_drawdown":     self.max_drawdown(),
+            "annualised_return":    self.annulaised_returns(),
+            "volatility":           self.volatility(),
+            "sharpe_ratio":         self.sharpe_ratio(),
+            "alpha_annualized":     self.alpha(),
+            "beta":                 self.beta(),
+            "max_drawdown":         self.max_drawdown(),
         })

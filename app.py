@@ -7,8 +7,8 @@ Structure:
     Sidebar         → ticker selection via S&P 500 universe (universe.py)
     Main area       → four sections:
                       0. Portfolio Overview   (sector, geography)
-                      1. Performance Analysis (cumulative returns, alpha)
-                      2. Risk Analysis        (rolling volatility)
+                      1. Performance Analysis (relative price performance, alpha)
+                      2. Risk Analysis        (rolling volatility, beta)
                       3. Risk-Return Analysis (sharpe ratio)
 
 Usage:
@@ -53,6 +53,20 @@ def chart_price(portfolio: Portfolio):
         line={"color": "black", "width": 3},
     )
 
+    return fig
+
+def chart_annualised_returns(portfolio: Portfolio):
+    data = (
+        portfolio.annualised_returns()
+        .rename_axis("Ticker")
+        .reset_index(name="Annualised Return (%)")
+    )
+    fig = px.bar(
+        data, x="Ticker", y="Annualised Return (%)",
+        title    = "Annualised Return (CAGR)",
+        subtitle = "Geometric compounding of daily returns, annualised over the selected period. Formula: (1 + Total Return)^(252/n) - 1.",
+    )
+    fig.add_hline(y=0, line_dash="dash", line_color="black")
     return fig
 
 def chart_alpha(portfolio: Portfolio):
@@ -139,7 +153,7 @@ def chart_geography(portfolio: Portfolio):
         geo_data,
         x="Allocation in %", y="region",
         orientation="h",
-        title="Country & Region Allocation (%)", 
+        title="Country & Region Allocation (%)",
         subtitle="Breakdown of portfolio composition by geographic sector."
     )
 
@@ -210,7 +224,8 @@ with col2:
 # ── Section 1: Performance Analysis ──────────────────────────────────────────
 
 st.header("Performance Analysis")
-st.plotly_chart(chart_price(portfolio), use_container_width=True)  
+st.plotly_chart(chart_price(portfolio), use_container_width=True)
+st.plotly_chart(chart_annualised_returns(portfolio), use_container_width=True)
 st.plotly_chart(chart_alpha(portfolio), use_container_width=True)
 
 
