@@ -104,7 +104,7 @@ class Portfolio:
 
         return benchmark
     
-    def _get_risk_free_rate() -> float:
+    def _get_risk_free_rate(self) -> float:
         """
         Fetches the current 10-year US Treasury yield as risk-free rate.
         ^TNX is quoted in percent — divide by 100 to get decimal.
