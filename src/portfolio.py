@@ -155,7 +155,7 @@ class Portfolio:
         returns_aligned, benchmark_aligned = self.returns.align(
             self.benchmark_returns, join="inner", axis=0
         )
-        daily_rf = self.rik_free_rate / TRADING_DAYS
+        daily_rf = self.risk_free_rate / TRADING_DAYS
         return returns_aligned - daily_rf, benchmark_aligned - daily_rf
 
     def _regression(self) -> pd.DataFrame:
