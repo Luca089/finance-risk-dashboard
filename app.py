@@ -28,7 +28,7 @@ from src.universe import get_sp500_universe
 
 st.set_page_config(page_title="Finance Risk Dashboard", layout="wide")
 st.title("Finance Risk Dashboard")
-st.caption("By Luca Polinski")
+st.caption("Luca Polinski")
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────

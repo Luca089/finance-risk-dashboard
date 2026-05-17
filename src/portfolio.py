@@ -2,7 +2,7 @@
 portfolio.py
 ------------
 Core analytics class for the Finance Risk Dashboard.
-Encapsulates data loading, KPI calculation, and metadata enrichment.
+Handles data loading, KPI calculation, and metadata enrichment.
 
 Integration:
     universe.py → supplies REGION_MAP (geographic classification logic)
@@ -27,7 +27,7 @@ TRADING_DAYS   = 252        # Standard number of trading days per year
 RISK_FREE_RATE = 0.05       # Fallback if dynamic fetch fails - see _get_risk_free_rate()
 ROLLING_WINDOW = 30         # EWMA span in trading days (JPMorgan RiskMetrics standard)
 
-# REGION_MAP is imported from universe.py — geographic classification
+# REGION_MAP is imported from universe.py — geographic classification because
 # is universe-level domain logic, not portfolio analytics logic.
 
 
@@ -39,7 +39,6 @@ class Portfolio:
 
     Typical usage in app.py:
         portfolio = Portfolio(["AAPL", "MSFT", "JPM"])
-        summary   = portfolio.summary()
 
     Parameters
     ----------
